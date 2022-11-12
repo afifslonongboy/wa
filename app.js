@@ -1,4 +1,5 @@
 const qrcode = require('qrcode');
+const qrcodeTer = require('qrcode-terminal');
 const fs = require('fs');
 const express = require('express');
 const socketIO = require('socket.io');
@@ -44,7 +45,7 @@ app.get('/', (req, res) => {
 });
 
 client.on('qr', qr => {
-    qrcode.generate(qr, { small: true });
+    qrcodeTer.generate(qr, { small: true });
 });
 
 client.on('ready', async () => {
