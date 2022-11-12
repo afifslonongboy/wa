@@ -10,14 +10,7 @@ const axios = require('axios');
 const mime = require('mime-types');
 const fileUpload = require('express-fileupload');
 const { body, validationResult } = require('express-validator');
-const client = new Client({
-    authStrategy: new LocalAuth(),
-    puppeteer: {
-        args: [
-            '--no-sandbox'
-        ],
-    }
-});
+const client = new Client();
 
 const port = process.env.PORT || 3000;
 
