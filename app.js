@@ -1,4 +1,4 @@
-const qrcode = require('qrcode-terminal');
+const qrcode = require('qrcode');
 const fs = require('fs');
 const express = require('express');
 const socketIO = require('socket.io');
