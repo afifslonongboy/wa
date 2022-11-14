@@ -16,6 +16,7 @@ const client = new Client({
         args: [
             '--no-sandbox'
         ],
+        executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
     }
 });
 
@@ -77,6 +78,20 @@ client.on('message', async msg => {
   + note = hanya sticker yang dikirim oleh pengirim yang bisa diubah menjadi gambar.
             `);
         }
+
+        // ganti judul grup
+        else if (msg.body.startsWith('.subject ')) {
+            // Change the group subject
+            let chat = await msg.getChat();
+            let contact = await msg.getContact();
+            if (contact.id.user === '6281333399425' || contact.id.user === '6282127065581') {
+                let newSubject = msg.body.slice(9);
+                chat.setSubject(newSubject);
+            } else {
+                msg.reply('Anda siapa.?')
+            }
+        }
+
             // ubah gambar jadi sticker
         else if (msg.body === '.sticker') {
             if (msg.hasMedia) {
@@ -130,6 +145,20 @@ client.on('message', async msg => {
                 }
             }
         }
+
+        else if (msg.body.startsWith('.tik ')) {
+            const url = msg.body.slice(5);
+            const { data: mediaData } = await axios.get(url, { responseType: "arraybuffer" })
+            const media = new MessageMedia(
+                'image/mp4',
+                mediaData.toString("base64")
+            );
+
+            msg.reply(media)
+        }
+
+
+
             // tag semua member
         else if (msg.body.startsWith('.tag ')) {
             const chat = await msg.getChat();
@@ -142,13 +171,31 @@ client.on('message', async msg => {
 
                 mentions.push(contact);
                 text = text;
-                console.log(participant.id);
+                console.log(contact);
             }
 
             await chat.sendMessage(text, { mentions });
 
-        };
+        }
+
+        else if (msg.body === '!list') {
+            let sections = [{ title: 'TUTORIAL', rows: [{ title: 'stiker' }, { title: 'gambar' }] }];
+            let list = new List(' ', 'PILIH TUTOR', sections, 'TUTOR', ' ');
+            client.sendMessage(msg.from, list);
+        }
     }
+});
+
+client.on('group_update', (notification) => {
+    // Group picture, subject or description has been updated.
+    let update = notification.body;
+    let type = notification.type;
+    if (type !== "picture") {
+        notification.reply(type + ' telah diubah menjadi ' + update);
+    } else {
+        notification.reply(type + ' telah diubah');
+    }
+    console.log(notification)
 });
 
 client.on('group_join', (notification) => {
