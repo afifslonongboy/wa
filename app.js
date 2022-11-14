@@ -16,7 +16,6 @@ const client = new Client({
         args: [
             '--no-sandbox'
         ],
-        executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
     }
 });
 
