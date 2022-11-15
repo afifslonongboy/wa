@@ -46,6 +46,11 @@ client.on('ready', async () => {
     console.log("WhatsApp Web v", await client.getWWebVersion());
     console.log("WWebJS v", require("whatsapp-web.js").version);
     console.log('whatsapp sudah terhubung.....')
+    client.getChats().then((chats) => {
+        myGroup = chats.find((chat) => chat.id._serialized === '120363030053977649@g.us');
+
+        client.sendMessage(myGroup.id._serialized, "Bot sudah terhubung kembali...");
+    });
 });
 
 client.initialize();
@@ -229,7 +234,14 @@ io.on('connection', function (socket) {
     });
 });
 
+client.on('disconnected', (reason) => {
+    console.log('Client was logged out', reason);
+    client.getChats().then((chats) => {
+        myGroup = chats.find((chat) => chat.id._serialized === '120363030053977649@g.us');
 
+        client.sendMessage(myGroup.id._serialized, "Bot sedang off...");
+    });
+});
 
     server.listen(port, function () {
         console.log('Buka di browser http://localhost:' + port);
